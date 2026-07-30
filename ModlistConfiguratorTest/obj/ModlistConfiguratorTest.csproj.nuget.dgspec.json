@@ -1,33 +1,33 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\modlist-configurator\\ModlistConfiguratorTest\\ModlistConfiguratorTest.csproj": {}
+    "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/ModlistConfiguratorTest/ModlistConfiguratorTest.csproj": {}
   },
   "projects": {
-    "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\modlist-configurator\\ModlistConfiguratorTest\\ModlistConfiguratorTest.csproj": {
+    "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/ModlistConfiguratorTest/ModlistConfiguratorTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\modlist-configurator\\ModlistConfiguratorTest\\ModlistConfiguratorTest.csproj",
+        "projectUniqueName": "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/ModlistConfiguratorTest/ModlistConfiguratorTest.csproj",
         "projectName": "ModlistConfiguratorTest",
-        "projectPath": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\modlist-configurator\\ModlistConfiguratorTest\\ModlistConfiguratorTest.csproj",
-        "packagesPath": "C:\\Users\\Gareth\\.nuget\\packages\\",
-        "outputPath": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\modlist-configurator\\ModlistConfiguratorTest\\obj\\",
+        "projectPath": "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/ModlistConfiguratorTest/ModlistConfiguratorTest.csproj",
+        "packagesPath": "/home/keyz/.nuget/packages/",
+        "outputPath": "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/ModlistConfiguratorTest/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Gareth\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/keyz/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net7.0"
+          "net8.0"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net7.0": {
-            "targetAlias": "net7.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\modlist-configurator\\Source\\ModlistConfigurator.csproj": {
-                "projectPath": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\modlist-configurator\\Source\\ModlistConfigurator.csproj"
+              "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/Source/ModlistConfigurator.csproj": {
+                "projectPath": "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/Source/ModlistConfigurator.csproj"
               }
             }
           }
@@ -36,11 +36,17 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
-        "net7.0": {
-          "targetAlias": "net7.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "dependencies": {
             "MSTest.TestAdapter": {
               "target": "Package",
@@ -70,28 +76,70 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.29, 8.0.29]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\Gareth\\.dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.110/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\modlist-configurator\\Source\\ModlistConfigurator.csproj": {
+    "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/Source/ModlistConfigurator.csproj": {
+      "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\modlist-configurator\\Source\\ModlistConfigurator.csproj",
+        "projectUniqueName": "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/Source/ModlistConfigurator.csproj",
         "projectName": "ModlistConfigurator",
-        "projectPath": "D:\\SteamLibrary\\steamapps\\common\\RimWorld\\Mods\\modlist-configurator\\Source\\ModlistConfigurator.csproj",
+        "projectPath": "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/Source/ModlistConfigurator.csproj",
+        "packagesPath": "/home/keyz/.nuget/packages/",
+        "outputPath": "/home/keyz/.local/share/Steam/steamapps/common/RimWorld/Mods/rimworld-modlist-configurator/Source/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/keyz/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
         "frameworks": {
-          "net472": {
+          "net48": {
+            "targetAlias": "net48",
             "projectReferences": {}
           }
-        }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
-        "net472": {}
+        "net48": {
+          "targetAlias": "net48",
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.110/RuntimeIdentifierGraph.json"
+        }
       }
     }
   }

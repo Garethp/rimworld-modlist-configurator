@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -9,9 +8,9 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>ModlistConfigurator</RootNamespace>
         <AssemblyName>ModlistConfigurator</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFramework>net48</TargetFramework>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>11</LangVersion>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,12 +32,15 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="0Harmony, Version=2.1.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\Lib.Harmony.2.1.0\lib\net472\0Harmony.dll</HintPath>
+        <Reference Include="0Harmony, Version=2.4.2.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Lib.Harmony.2.4.2\lib\net48\0Harmony.dll</HintPath>
           <Private>False</Private>
         </Reference>
         <Reference Include="Assembly-CSharp">
           <HintPath>..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+          <HintPath Condition="Exists('../../../RimWorldWin64_Data/Managed/Assembly-CSharp.dll')">../../../RimWorldWin64_Data/Managed/Assembly-CSharp.dll</HintPath>
+          <HintPath Condition="Exists('../../../RimWorldLinux_Data/Managed/Assembly-CSharp.dll')">../../../RimWorldLinux_Data/Managed/Assembly-CSharp.dll</HintPath>
+          <HintPath Condition="Exists('../../../Contents/Resources/Data/Managed/Assembly-CSharp.dll')">../../../Contents/Resources/Data/Managed/Assembly-CSharp.dll</HintPath>
           <Private>False</Private>
         </Reference>
         <Reference Include="System" />
@@ -46,29 +48,16 @@
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+          <HintPath Condition="Exists('../../../RimWorldWin64_Data/Managed/UnityEngine.CoreModule.dll')">../../../RimWorldWin64_Data/Managed/UnityEngine.CoreModule.dll</HintPath>
+          <HintPath Condition="Exists('../../../RimWorldLinux_Data/Managed/UnityEngine.CoreModule.dll')">../../../RimWorldLinux_Data/Managed/UnityEngine.CoreModule.dll</HintPath>
+          <HintPath Condition="Exists('../../../Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll')">../../../Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll</HintPath>  
           <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.TextRenderingModule">
-          <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+          <HintPath Condition="Exists('../../../RimWorldWin64_Data/Managed/UnityEngine.TextRenderingModule.dll')">../../../RimWorldWin64_Data/Managed/UnityEngine.TextRenderingModule.dll</HintPath>
+          <HintPath Condition="Exists('../../../RimWorldLinux_Data/Managed/UnityEngine.TextRenderingModule.dll')">../../../RimWorldLinux_Data/Managed/UnityEngine.TextRenderingModule.dll</HintPath>
+          <HintPath Condition="Exists('../../../Contents/Resources/Data/Managed/UnityEngine.TextRenderingModule.dll')">../../../Contents/Resources/Data/Managed/UnityEngine.TextRenderingModule.dll</HintPath>
           <Private>False</Private>
         </Reference>
     </ItemGroup>
-    <ItemGroup>
-      <Compile Include="ModlistConfigurator.cs" />
-      <Compile Include="ModlistPresetDef.cs" />
-      <Compile Include="Preset.cs" />
-      <Compile Include="Settings.cs" />
-      <Compile Include="SettingsImporter.cs" />
-      <Compile Include="XmlUtils.cs" />
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
-
 </Project>
