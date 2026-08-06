@@ -6,9 +6,10 @@ public class Utils
 {
     public static XmlNode GetSettings(string fixtureName)
     {
-        return SettingsImporter.GetSettingsFromFile(Path.GetFullPath($"../../../Fixtures/{fixtureName}.xml"))
-            .DocumentElement
-            .ChildNodes[0];
+        var fixturePath = Path.GetFullPath($"../../../Fixtures/{fixtureName}.xml");
+        return SettingsImporter.GetSettingsFromFile(fixturePath)
+            ?.DocumentElement
+            ?.ChildNodes[0] ?? throw new FileNotFoundException($"Fixture not found: {fixturePath}");
     }
 
     private Report DoSomething()
@@ -32,5 +33,5 @@ public class Utils
 public class Report
 {
     public Boolean Ok;
-    public String Message;
+    public String Message = "Unknown Issue";
 }

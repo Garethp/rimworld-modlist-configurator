@@ -67,14 +67,28 @@ public class SettingsImporter
                 var name = XmlUtils.GetChildNodeByName(presetDef, "defName")?.InnerText;
                 var label = XmlUtils.GetChildNodeByName(presetDef, "presetLabel")?.InnerText;
                 var version = XmlUtils.GetChildNodeByName(presetDef, "version")?.InnerText;
+                var subDir = XmlUtils.GetChildNodeByName(presetDef, "subDir")?.InnerText;
 
                 if (name is null || label is null || version is null) continue;
 
+                var fullPath = subDir == null ? modContentPack.ModMetaData.RootDir : new DirectoryInfo(Path.Combine(modContentPack.RootDir, subDir));
+
                 // Get the directory where the preset settings are stored
-                var presetLocation = modContentPack.ModMetaData.RootDir.GetDirectories()
+                var presetLocation = fullPath.GetDirectories()
                     .FirstOrDefault(dir => dir.Name == "Settings");
 
-                if (presetLocation is null) continue;
+                if (presetLocation is null)
+                {
+                    if (fullPath.Name == "Settings" && fullPath.Exists)
+                    {
+                        presetLocation = fullPath;
+                    }
+                    else
+                    {
+                        Log.Error($"No settings directory found for preset {name}");
+                        continue;
+                    }
+                }
 
                 presets.Add(new Preset(name, label, version, presetLocation));
             }
