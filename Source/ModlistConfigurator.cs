@@ -10,9 +10,14 @@ public class ModlistConfigurator : Mod
 {
     public static DirectoryInfo SettingsDir;
 
+    // Resolved at runtime rather than hardcoded, so a fork/rename of this mod doesn't silently disable
+    // the "never deactivate this mod" safety rail in ModListImporter.
+    public static string OwnPackageId;
+
     public ModlistConfigurator(ModContentPack content) : base(content)
     {
         SettingsDir = Content.ModMetaData.RootDir.GetDirectories().FirstOrDefault(dir => dir.Name == "Settings");
+        OwnPackageId = Content.ModMetaData.PackageId;
         GetSettings<Settings>().AutomaticSettingsImport();
     }
 

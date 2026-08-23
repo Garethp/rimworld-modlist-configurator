@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -55,7 +56,7 @@ public class SettingsImporter
         {
             // Grab all Defs that have a valid `<Defs>` node with a `<ModlistConfigurator.ModlistPresetDef>` node under it
             // @TODO: Maybe the `<ModlistConfigurator.ModlistPresetDef>` won't be the first node? We could check all children if we want...
-            var presetDefs = modContentPack.LoadDefs()
+            var presetDefs = modContentPack.LoadDefs(false)
                 .Where(loadableAsset => loadableAsset.xmlDoc?.FirstChild?.FirstChild is not null)
                 .Select(loadableAsset => loadableAsset.xmlDoc.FirstChild.FirstChild)
                 .Where(defNode => defNode.Name == defClassName)
@@ -70,13 +71,12 @@ public class SettingsImporter
 
                 if (name is null || label is null || version is null) continue;
 
-                // Get the directory where the preset settings are stored
+                // Get the directory where the preset settings are stored. May be absent for a preset
+                // that only ships a ModList.xml (no per-mod settings) - that's still a valid preset.
                 var presetLocation = modContentPack.ModMetaData.RootDir.GetDirectories()
                     .FirstOrDefault(dir => dir.Name == "Settings");
 
-                if (presetLocation is null) continue;
-
-                presets.Add(new Preset(name, label, version, presetLocation));
+                presets.Add(new Preset(name, label, version, presetLocation, modContentPack.ModMetaData.RootDir));
             }
         }
 
@@ -115,7 +115,7 @@ public class SettingsImporter
 
         var loadedPreset = new LoadedPreset(preset.Name, preset.Version);
 
-        foreach (var file in preset.SettingsDirectory.GetFiles())
+        foreach (var file in preset.SettingsDirectory?.GetFiles() ?? Array.Empty<FileInfo>())
         {
             var match = Regex.Match(file.Name, @"^Mod_(.*)_(.*).xml$");
             if (!match.Success) continue;
@@ -176,7 +176,7 @@ public class SettingsImporter
 
         var loadedPreset = new LoadedPreset(preset.Name, preset.Version);
 
-        foreach (var file in preset.SettingsDirectory.GetFiles())
+        foreach (var file in preset.SettingsDirectory?.GetFiles() ?? Array.Empty<FileInfo>())
         {
             var match = Regex.Match(file.Name, @"^Mod_(.*)_(.*).xml$");
             if (!match.Success) continue;
@@ -217,7 +217,7 @@ public class SettingsImporter
         if (!Presets.ContainsKey(presetName)) return;
         var preset = Presets[presetName];
 
-        foreach (var file in preset.SettingsDirectory.GetFiles())
+        foreach (var file in preset.SettingsDirectory?.GetFiles() ?? Array.Empty<FileInfo>())
         {
             var match = Regex.Match(file.Name, @"^Mod_(.*)_(.*).xml$");
             if (!match.Success) continue;
@@ -282,7 +282,7 @@ public class SettingsImporter
 
         List<string> modsToImport = new();
 
-        foreach (var file in Presets[presetName].SettingsDirectory.GetFiles())
+        foreach (var file in Presets[presetName].SettingsDirectory?.GetFiles() ?? Array.Empty<FileInfo>())
         {
             var match = Regex.Match(file.Name, @"^Mod_(.*)_(.*).xml$");
             if (!match.Success) continue;

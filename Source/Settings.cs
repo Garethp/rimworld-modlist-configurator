@@ -108,12 +108,31 @@ public class Settings : ModSettings
             Find.WindowStack.Add(new FloatMenu(presets));
         }
 
+        var presetsWithModList = Importer.GetPresets().Where(ModListImporter.HasModList).ToList();
+
+        if (presetsWithModList.Count > 0)
+        {
+            var modListButtonPosition = listing.GetRect(34f);
+
+            if (Widgets.ButtonText(modListButtonPosition.LeftHalf().ContractedBy(2f), "Apply Mod List from Preset"))
+            {
+                List<FloatMenuOption> presets = new();
+
+                presetsWithModList.ForEach(preset =>
+                {
+                    presets.Add(new FloatMenuOption(preset.Label, () => { PromptApplyModList(preset); }));
+                });
+
+                Find.WindowStack.Add(new FloatMenu(presets));
+            }
+        }
+
         if (!Prefs.DevMode)
         {
             listing.End();
             return;
         }
-        
+
         listing.GapLine();
         var nextButtonPosition = listing.GetRect(34f);
 
@@ -128,7 +147,19 @@ public class Settings : ModSettings
 
             Find.WindowStack.Add(new FloatMenu(presets));
         }
-        
+
+        if (Widgets.ButtonText(nextButtonPosition.RightHalf().ContractedBy(2f), "Export Current Mod List to Preset"))
+        {
+            List<FloatMenuOption> presets = new();
+
+            Importer.GetPresets().ForEach(preset =>
+            {
+                presets.Add(new FloatMenuOption(preset.Label, () => { ExportModList(preset); }));
+            });
+
+            Find.WindowStack.Add(new FloatMenu(presets));
+        }
+
         listing.End();
     }
 
@@ -204,5 +235,98 @@ public class Settings : ModSettings
                         buttonAAction: ModsConfig.RestartFromChangedMods));
                 }, buttonBText: "Cancel"));
         }
+    }
+
+    private void PromptApplyModList(Preset preset)
+    {
+        var exactPreview = ModListImporter.Preview(preset, ModListApplyMode.Exact);
+        var mergePreview = ModListImporter.Preview(preset, ModListApplyMode.Merge);
+
+        if (exactPreview is null || mergePreview is null)
+        {
+            Find.WindowStack.Add(new Dialog_MessageBox($"Could not read the mod list for \"{preset.Label}\"."));
+            return;
+        }
+
+        if (exactPreview.Diff.IsNoOp && mergePreview.Diff.IsNoOp)
+        {
+            Find.WindowStack.Add(new Dialog_MessageBox(
+                $"Current mod list already matches \"{preset.Label}\" Preset. There's nothing to apply."));
+            return;
+        }
+
+        var message = BuildModListDiffMessage(preset.Label, exactPreview, mergePreview);
+
+        Find.WindowStack.Add(new Dialog_MessageBox(
+            message,
+            buttonAText: "Set exact list",
+            buttonAAction: () => ConfirmApplyModList(preset, exactPreview),
+            buttonBText: "Merge into current",
+            buttonBAction: () => ConfirmApplyModList(preset, mergePreview))
+        {
+            buttonCText = "Cancel"
+        });
+    }
+
+    private static string BuildModListDiffMessage(string presetLabel, ModListApplyPreview exactPreview,
+        ModListApplyPreview mergePreview)
+    {
+        var lines = new List<string>
+        {
+            $"Applying the mod list from \"{presetLabel}\" will restart Rimworld. Choose how to apply it:",
+            "",
+            $"Exact: {exactPreview.Diff.ToEnable.Count} to enable, {exactPreview.Diff.ToDisable.Count} to disable" +
+            (exactPreview.Diff.OrderDiffers ? ", reorders mods" : ""),
+            $"Merge: {mergePreview.Diff.ToEnable.Count} to enable, keeps all your other mods" +
+            (mergePreview.Diff.OrderDiffers ? ", reorders mods" : "")
+        };
+
+        var missing = exactPreview.Diff.Missing;
+        if (missing.Count > 0)
+        {
+            lines.Add("");
+            lines.Add($"Not installed, will be skipped: {string.Join(", ", missing.Select(entry => entry.DisplayName))}");
+        }
+
+        var brokenDependencies = exactPreview.Diff.BrokenDependencies.Concat(mergePreview.Diff.BrokenDependencies)
+            .Select(broken => broken.ModDisplayName ?? broken.ModPackageId)
+            .Distinct()
+            .ToList();
+        if (brokenDependencies.Count > 0)
+        {
+            lines.Add("");
+            lines.Add($"Warning: applying may break dependencies for: {string.Join(", ", brokenDependencies)}");
+        }
+
+        return string.Join("\r\n", lines);
+    }
+
+    private void ConfirmApplyModList(Preset preset, ModListApplyPreview preview)
+    {
+        Find.WindowStack.Add(new Dialog_MessageBox(
+            $"Restarting Rimworld to apply the mod list. Continue?",
+            buttonAAction: () =>
+            {
+                ModListImporter.Commit(preview.Candidate);
+
+                var appliedEntries = ModListImporter.ReadModList(preset) ?? new List<PresetModEntry>();
+                var loadedPreset = StoredPresets.TryGetValue(preset.Name, out var existing)
+                    ? existing
+                    : new LoadedPreset(preset.Name, preset.Version);
+                loadedPreset.ModList = appliedEntries.Select(entry => new StoredModEntry(entry)).ToList();
+
+                if (StoredPresets.ContainsKey(preset.Name)) StoredPresets.Remove(preset.Name);
+                StoredPresets.Add(preset.Name, loadedPreset);
+                Write();
+
+                ModsConfig.RestartFromChangedMods();
+            },
+            buttonBText: "Cancel"));
+    }
+
+    private void ExportModList(Preset preset)
+    {
+        var path = ModListImporter.ExportCurrentModList(preset);
+        Find.WindowStack.Add(new Dialog_MessageBox($"Mod list exported to:\r\n{path}"));
     }
 }
