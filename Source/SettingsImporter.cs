@@ -55,7 +55,7 @@ public class SettingsImporter
         {
             // Grab all Defs that have a valid `<Defs>` node with a `<ModlistConfigurator.ModlistPresetDef>` node under it
             // @TODO: Maybe the `<ModlistConfigurator.ModlistPresetDef>` won't be the first node? We could check all children if we want...
-            var presetDefs = modContentPack.LoadDefs()
+            var presetDefs = modContentPack.LoadDefs(false)
                 .Where(loadableAsset => loadableAsset.xmlDoc?.FirstChild?.FirstChild is not null)
                 .Select(loadableAsset => loadableAsset.xmlDoc.FirstChild.FirstChild)
                 .Where(defNode => defNode.Name == defClassName)
